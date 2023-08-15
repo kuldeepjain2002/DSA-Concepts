@@ -1,0 +1,64 @@
+vector<int> level;
+vector<vector<int>> up;
+vector<vector<int>> maxdist;
+int l;
+
+void dfs(int src, int par, int wt,int lev, vector<vector<pair<int,int>>> &adj){
+    level[src] = lev;
+    up[src][0] = par;
+    maxdist[src][0]= wt;
+    
+    for(int i=1; i<=l; i++){
+        up[src][i] = up[up[src][i-1]][i-1];
+        maxdist[src][i] = max(maxdist[src][i-1], maxdist[up[src][i-1]][i-1]);
+    }
+
+    for(auto pp : adj[src]){
+        if(pp.first!= par)dfs(pp.first, src, pp.second, lev+1, adj);
+    }    
+}
+
+
+int LCA(int u ,int v){
+    if(level[u]<level[v]){
+        swap(u,v);
+    }
+    int mxd = 0;
+    for(int i =l; i>=0; i--){
+        if(level[u]-pow(2,i)>= level[v]){
+            mxd = max(mxd, maxdist[u][i]);
+            u= up[u][i];
+        }
+    }
+    if(u==v)return mxd;
+    for(int i =l; i>=0; i--){
+        if(up[u][i]!= up[v][i]){
+            mxd = max({mxd, maxdist[u][i],maxdist[v][i]} );
+            u = up[u][i];
+            v = up[v][i];
+        }
+    }
+    mxd = max({mxd, maxdist[u][0],maxdist[v][0]} );
+    return mxd;
+}
+
+vector<int> Solution::solve(vector<vector<int> > &A, vector<vector<int> > &B) {
+    int n = A.size()+1;
+    l = ceil(log2(n));
+    up.resize(n, vector<int>(l+1));
+    maxdist.resize(n, vector<int>(l+1));
+    vector<vector<pair<int,int>>> adj(n);
+    level.resize(n);
+    for(int i =0; i<A.size(); i++){
+        adj[A[i][0]-1].push_back({A[i][1]-1 , A[i][2]});
+        adj[A[i][1]-1].push_back({A[i][0]-1 , A[i][2]});
+    } 
+    vector<int> ans;
+    dfs(0,0,0,0, adj);
+    
+    for(int i =0; i<B.size(); i++){
+        ans.push_back(LCA(B[i][0]-1, B[i][1]-1));
+    } 
+    
+    return ans;       
+}
