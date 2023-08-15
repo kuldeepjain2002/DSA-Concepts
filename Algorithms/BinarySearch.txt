@@ -1,0 +1,28 @@
+##In python
+
+import math
+class Solution:
+    # @param A : tuple of integers
+    # @param B : integer
+    # @return a list of integers
+    def searchRange(self, A, B):
+        ans = [-1, -1]
+        s, e = 0, len(A)-1
+				# to find leftmost element
+        while(s < e):
+            mid = math.floor((s + e) / 2)
+            if(A[mid] < B):
+                s = mid + 1
+            else:
+                e = mid
+        ans[0] = s if A[s] == B else -1
+        s, e = 0, len(A)-1
+				# to find rightmost element
+        while(s < e):
+            mid = math.ceil((s + e) / 2)
+            if(A[mid] > B):
+                e = mid - 1
+            else:
+                s = mid
+        ans[1] = e if A[e] == B else -1
+        return ans
