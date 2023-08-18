@@ -1,0 +1,37 @@
+int atmost(vector<int> &A, int B){
+    map<int,int> mp;
+    int l =0;
+    int r = 0;
+    int n = A.size();
+    int cnt =0;
+    while(r<n){
+        mp[A[r]]++;
+        if(mp.size()<=B){
+            cnt += (r-l+1);
+            r++;
+        }
+        else{
+            while(l<r && mp.size()>B){
+                if(mp[A[l]]==1){
+                    mp.erase(mp.find(A[l]));
+                }
+                else{
+                    mp[A[l]]--;
+                }
+                l++;
+                if(mp.size()<=B){
+                    cnt+= (r-l+1);
+                    break;
+                }
+            }
+            r++;
+        }  
+    }
+    
+    return cnt;
+    
+}
+
+int Solution::solve(vector<int> &A, int B) {
+    return atmost(A,B) - atmost(A,B-1);
+}
