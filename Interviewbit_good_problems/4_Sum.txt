@@ -1,0 +1,76 @@
+vector<vector<int> > Solution::fourSum(vector<int> &A, int B) {
+    int n = A.size();
+    sort(A.begin(), A.end());
+    vector<vector<int> > ans;
+    // for(int i =0; i<n; i++){
+    //     cout<<A[i]<<" ";
+    // }
+    // cout<<endl;
+    
+    for(int i =0; i<n; i++){
+        
+        
+        
+        for(int j =i+1; j<n; j++){
+            
+            int req = B - A[i]- A[j];
+            int l = j+1;
+            int r = n-1;
+            while(l<r){
+                if(A[l]+A[r]==req){
+                    // cout<<l<<" "<<r<<endl;
+                    vector<int> vv ={A[i], A[j], A[l], A[r]};
+                    ans.push_back(vv);
+                    l++;
+                    while(A[l] == A[l-1]){
+                        l++;                        
+                    }
+                    r--;
+                    while(A[r]== A[r+1]){
+                        r--;
+                    }
+                    
+                    
+                    
+                }
+                else if(A[l]+A[r]<req){
+                    l++;
+                    while(A[l] == A[l-1]){
+                        l++;                        
+                    }
+                    
+                    
+                    
+                }
+                else{
+                    r--;
+                    while(A[r]== A[r+1]){
+                        r--;
+                    }
+                }
+               
+            }
+            
+            while(A[j+1]==A[j]){
+                j++;
+                if(j==n-2){
+                    break;
+                }
+                
+            }
+            
+        }
+        while(A[i+1]==A[i]){
+                i++;
+                if(i==n-3){
+                    break;
+                }
+                
+            }
+        
+    }
+    return ans;
+}
+
+
+///use i and j as 1st 2 elements of  the quardaple , it will not give problems ,,keeping it mid will give while avoiding duplicates\

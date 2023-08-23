@@ -1,0 +1,48 @@
+class MedianFinder {
+public:
+    priority_queue<int> mxheap;
+    priority_queue<int, vector<int> , greater<int>> mnheap;
+
+    MedianFinder() {
+        
+    }
+    
+    void addNum(int num) {
+        cout<<"add"<<endl;
+        if(mxheap.empty()){
+            mxheap.push(num);
+            return;
+        }
+        if(num<mxheap.top()){
+            mxheap.push(num);
+        }
+        else{
+            mnheap.push(num);
+        }
+
+        if(mnheap.size()>mxheap.size()){
+            int p = mnheap.top();
+            mnheap.pop();
+            mxheap.push(p);
+        }
+        else if(mxheap.size()-mnheap.size()==2){
+            int p = mxheap.top();
+            mxheap.pop();
+            mnheap.push(p);
+        }
+        return;
+    }
+    
+    double findMedian() {
+        // cout<<"find,m"<<endl;
+        double d= 0;
+        if(mnheap.size()== mxheap.size()){
+            d =( (double) mnheap.top() + (double) mxheap.top())/2;
+
+        }
+        else{
+            d = mxheap.top();
+        }
+        return d;
+    }
+};
