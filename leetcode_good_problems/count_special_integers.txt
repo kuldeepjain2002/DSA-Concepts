@@ -1,0 +1,61 @@
+class Solution {
+public:
+    vector<long long> fact;
+    long long fac(int x){
+        if(x<0)return 1;
+        return fact[x];
+    }
+    int countSpecialNumbers(int n) {
+        int dig = log10(n)+1;
+        fact.resize(10);
+        if(dig==1)return n;
+        long long ans = 9;
+        long long prod = 9;
+        for(int i =0;i<dig-2; i++){
+            prod = prod*(9-i);
+            ans = ans+ prod;
+        }
+        
+        fact[0]=1;
+        for(int i =1; i<=9; i++){
+            fact[i]= i*fact[i-1];
+        }
+
+        string s = "";
+        for(int i =0; i<dig; i++){
+            int k = n/pow(10,dig-i-1);
+            k= k%10;
+            s.push_back(k+'0');
+        }
+        // cout<<s<<endl;
+        unordered_map<int,int> mp;
+        cout<<ans<<endl;
+        for(int i =0; i<dig; i++){
+            int num = s[i]-'0';
+            if(mp[num]==1){
+                int thrre =0;
+                for(int j =0; j<num; j++){
+                    if(!mp[j]){
+                        thrre++;
+                    }
+                }
+                ans+= (thrre*fac(9-i))/fac(9-i-(dig-i-1));
+                break;
+            }
+            mp[num]=1;
+            long long times = (i==0)?1:0;
+            int cntt=0;
+            int inthere =0;
+            for(int j = times; j<num; j++){
+                if(mp[j]!=1)cntt++;
+                else{
+                    inthere++;
+                }
+            }
+            ans += ((cntt)*fac(9-i))/fac(9-i-(dig-i-1));
+            if(i==dig-1)ans++;
+            cout<<ans<<endl;
+        }
+        return ans;
+    }
+};
