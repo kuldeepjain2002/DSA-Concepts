@@ -1,0 +1,52 @@
+int mod = 1e9+7;
+vector<vector<long long>> nCrdp;
+long long nCr(long long n, long long r){
+    if(r > n){
+        return 0;
+    }
+    if(n<=1) return 1;
+    if(r==0) return 1;
+    if(r==1) return n;
+    if(nCrdp[n][r]!=-1)return nCrdp[n][r];
+    return nCrdp[n][r] = (nCr(n-1,r)%mod + nCr(n-1,r-1)%mod )%mod;
+}
+
+
+long long sol(int keys, int B , vector<vector<long long>>&dp ){
+    if(keys<=B)return 0;
+    if(keys ==1 && B==0)return 1;
+    else if(keys ==1 || B==0) return 0;
+    if(B<0)return 0;
+    
+    if(dp[keys][B]!= -1)return dp[keys][B];
+    long long ans =0;
+    
+    ans+= 2*sol(keys-1,B-1, dp);
+    ans%=mod;
+    for(int i =1; i<keys-1 ; i++){
+        // cout<<"key"<<i<<endl;
+        // ans+= nCr(keys-1,i)*sol(i,B-1,dp)*sol(keys-1-i,B-1,dp);
+        ans+= (nCr(keys-1,i)*((sol(i,B-1,dp)%mod)*(sol(keys-1-i,B-1,dp)%mod)%mod)%mod);
+        ans = (ans+ mod)%mod;
+
+        for(int j =1;j<B; j++ ){
+            ans+= (nCr(keys-1,i)*((sol(i,B-1,dp)%mod)*(sol(keys-1-i,B-1-j,dp)%mod)%mod)%mod);
+            ans+= (nCr(keys-1,i)*((sol(i,B-1-j,dp)%mod)*(sol(keys-1-i,B-1,dp)%mod)%mod)%mod);
+            ans = (ans+ mod)%mod;
+            // ans+= nCr(keys-1,i)*sol(i,B-1-i,dp)*sol(keys-1-i,B-1,dp);
+        }
+    }
+    // cout<<keys<<" "<<B<<" "<<ans<<endl;
+    
+    return dp[keys][B] = (ans+ mod)%mod;;
+}
+
+int Solution::cntPermBST(int A, int B) {
+    nCrdp.clear();
+    nCrdp.resize(A+1,vector<long long>(A+1,-1));
+    vector<vector<long long>>dp(A+1,vector<long long>(B+1,-1));
+    if(A<=B)return 0;
+    long long as=  sol(A, B,dp);
+    int anss= as%mod;
+    return anss;
+}

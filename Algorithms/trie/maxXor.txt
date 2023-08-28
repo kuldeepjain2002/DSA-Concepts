@@ -1,0 +1,53 @@
+class TrieNode{
+public:
+    TrieNode *next[2];
+    TrieNode(){
+        next[0]=NULL;
+        next[1]= NULL;
+    }
+    
+};
+
+int Solution::solve(vector<int> &A, vector<int> &B) {
+    TrieNode *myNode = new TrieNode();
+    TrieNode *curr = myNode;
+    for(int j =0; j<A.size(); j++){
+        int x = A[j];
+        TrieNode *curr = myNode;
+        for(int i =31; i>=0; i--){
+            if(!curr->next[(x>>i)&1]){
+                curr->next[(x>>i)&1]= new TrieNode();
+                curr= curr->next[(x>>i)&1];
+                
+            }
+            else{
+                curr = curr->next[(x>>i)&1];   
+            }
+            
+        }
+    }
+    
+    // cout<<123<<endl;
+    // cout<<"ol"<<endl;
+    int mx=0;
+    for(int j=0; j<B.size(); j++){
+        int y = B[j];
+        TrieNode * cur = myNode;
+        int ans=0;
+        for(int i =31; i>=0; i--){
+            if(cur->next[((y>>i)&1)^1]){
+                // curr.next[x&1<<i]= new TrieNode();
+                cur= cur->next[((y>>i)&1)^1];
+                ans|= (1<<i);
+                
+            }
+            else{
+                cur = cur->next[(y>>i)&1];   
+            }
+            
+        }
+        mx = max(ans,mx);
+        
+    }
+    return mx;
+}

@@ -1,0 +1,21 @@
+int Solution::solve(int A) {
+    long long mod = 1000000007;
+    if(A%2==1)return 0;
+    vector<long long >dp(A+1,0);
+    vector<long long> sm(A+1,0);
+    dp[0]= 1;
+    dp[2]= 3;
+    sm[0]=1;
+    sm[2]=4;
+    for(int i =4;i<=A; i+=2){
+        int a= ((dp[i-2]%mod)*3)%mod;
+        a = (a + sm[i-4])%mod;
+        a = (a + sm[i-4])%mod;
+        dp[i]= a%mod;
+        sm[i]= (sm[i-2]%mod+a%mod)%mod;
+    }
+    
+    return (int)dp[A];
+    
+    
+}

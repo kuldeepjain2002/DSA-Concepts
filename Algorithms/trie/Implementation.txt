@@ -1,0 +1,66 @@
+class Trie {
+public:
+    Trie* next[26];
+    bool end = false;
+    Trie() {
+        for(int i = 0; i<26; i++){
+            next[i]= NULL;
+        }
+    }
+    
+    void insert(string word) {
+        Trie* node = this;
+        for(int i =0; i<word.size(); i++){
+            if(node->next[(word[i]-'a')] != NULL){
+                node = node->next[(word[i]-'a')];
+            }
+            else{
+                node->next[(word[i]-'a')] = new Trie();
+                node = node->next[(word[i]-'a')];
+            }
+            if(i==word.size()-1){
+                node->end = true;
+            }
+        }  
+    }
+    
+    bool search(string word) {
+        Trie* node = this;
+        for(int i =0; i<word.size(); i++){
+            if(node->next[(word[i]-'a')] != NULL){
+                node = node->next[(word[i]-'a')];
+            }
+            else{
+                return false;
+            }
+            if(i==word.size()-1){
+               if(node->end)return true;
+               return false;
+            }
+            
+        }  
+        return false;       
+    }
+    
+    bool startsWith(string prefix) {
+        Trie* node = this;
+        for(int i =0; i<prefix.size(); i++){
+            if(node->next[(prefix[i]-'a')] != NULL){
+                node = node->next[(prefix[i]-'a')];
+            }
+            else{
+                return false;
+            }
+        } 
+        return true;
+        
+    }
+};
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie* obj = new Trie();
+ * obj->insert(word);
+ * bool param_2 = obj->search(word);
+ * bool param_3 = obj->startsWith(prefix);
+ */
