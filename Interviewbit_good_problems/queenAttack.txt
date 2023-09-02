@@ -1,0 +1,43 @@
+int dx[8] = {0,0,1,1,1,-1,-1,-1};
+int dy[8] = {1,-1,0,1,-1,0,1,-1};
+
+bool isValid(int x,int y, int n,int m){
+    if(x<0 || y<0 || x>=n || y>= m){
+        return false;
+    }
+    return true;
+}
+
+int cnt(int i, int j, int k, int n , int m, vector<string> &A, vector<vector<vector<int>>>&dp){
+    int cont = 0;
+    int x = i+ dx[k];
+    int y = j + dy[k];
+    if(!isValid(x,y,n,m)){
+        return cont;
+    }
+    
+    if(dp[i][j][k]!=-1)return dp[i][j][k];
+    if(A[x][y]=='1'){
+        return 1;
+    }
+    return dp[i][j][k] = cnt(x,y,k,n,m,A,dp);
+}
+
+vector<vector<int> > Solution::queenAttack(vector<string> &A) {
+    int n = A.size();
+    int m = A[0].size();
+    vector<vector<int>>ans(n,vector<int>(m));
+    vector<vector<vector<int>>>dp(n+1,vector<vector<int>>(m+1, vector<int>(8,-1)));
+    for(int i =0; i<n; i++){
+        for(int j =0; j<m;j++){
+            int cc =0;
+            for(int k = 0; k<8; k++){
+                cc+= cnt(i,j, k,n,m,A,dp);
+                // cout<<cc<<" "<<i<<" "<<j<<" "<<k<<endl;
+            }
+            ans[i][j]=cc;
+        }
+    }
+    return ans;
+    
+}
