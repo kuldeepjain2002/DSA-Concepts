@@ -1,0 +1,40 @@
+void dfs(int root,vector<int> &vis, vector<vector<int>> &g ){
+    vis[root]= 1;
+    for(auto v : g[root]){
+        if(!vis[v]){
+            dfs(v,vis,g);
+        }
+    }
+    return;
+}
+
+int revdfs(int root , vector<int> &vis2 ,vector<int> &A){
+    if(vis2[root]==1 || (A[root] == root)){
+        return root;
+    }
+    vis2[root] = 1;
+    return revdfs(A[root],vis2,A);
+}
+
+int Solution::solve(vector<int> &A) {
+    int n = A.size();
+    vector<vector<int>> g(n);
+    for(int i =0; i<A.size(); i++){
+        g[--A[i]].push_back(i);
+    }
+    vector<int> vis(n,0);
+    dfs(0,vis,g);
+
+    int cnt =0;
+    
+    for(int i =0; i<n; i++){
+        if(!vis[i]){
+            cnt++;
+            vector<int> vis2(n,0);
+            int root = revdfs(i,vis2,A);
+            dfs(root,vis,g); 
+        }
+    }
+    
+    return cnt;
+}

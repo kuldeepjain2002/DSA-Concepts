@@ -1,0 +1,55 @@
+string Solution::multiple(int A) {
+    queue<int> q;
+    q.push({1});
+    vector<int> vis(A,0);
+    vector<int> par(A,0);
+    vector<int> val(A);
+    // map<int,int> mp;
+    // mp[1]=1;
+    if(1%A==0){
+        return "1";
+    }
+    vis[1]=1;
+    par[1]=-1;
+    val[1]=1;
+    
+    while(!q.empty()){
+        // int p = q.front();
+        int k = q.front();
+        q.pop();
+        if(k==0){
+            string s ="";
+            while(k!=-1){
+                s.push_back(val[k]+'0');
+                k = par[k];
+                
+            }
+            reverse(s.begin(), s.end());
+            return s;
+            
+        }
+        
+        
+        if(vis[(k*10) % A]==0){
+            q.push((k*10)%A);
+            vis[(k*10) % A]=1;
+            par[(k*10) % A]= k;
+            val[(k*10) % A]=0;
+                
+        }
+            
+        
+        if(vis[(k*10+1) % A]==0){
+            q.push((k*10+1)%A);
+            vis[(k*10+1 ) % A]=1;
+            par[(k*10+1) % A]= k;
+            val[(k*10+1) % A]=1;
+                
+                
+        }
+            
+        
+    }
+    
+    return "-1";
+}
