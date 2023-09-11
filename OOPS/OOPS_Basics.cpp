@@ -7,6 +7,9 @@
 #include <stack>
 #include <string>
 #include <cmath>
+#include <unordered_map>
+
+using namespace std;
 
 #define rep(i, n) for (long long int i = 0; i < n; i++)
 #define repinv(i, n) for (long long int i = n - 1; i >= 0; i--)
