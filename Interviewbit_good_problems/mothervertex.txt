@@ -1,0 +1,30 @@
+vector < vector < int >> adj;
+void DFS(int src, vector < bool > & vis) {
+    vis[src] = true;
+    for (auto &x: adj[src]) {
+        if (!vis[x]) {
+            DFS(x, vis);
+        }
+    }
+}
+int Solution::motherVertex(int A, vector < vector < int > > & B) {
+    adj.clear();
+    adj.resize(A + 1);
+    vector < bool > vis(A + 1), check(A + 1);
+    for (int i = 0; i < B.size(); i++) {
+        adj[B[i][0]].push_back(B[i][1]);
+    }
+    int mother = 0;
+    for (int i = 1; i <= A; i++) {
+        if (!vis[i]) {
+            mother = i;
+            DFS(i, vis);
+        }
+    }
+    DFS(mother, check);
+    for (int i = 1; i <= A; i++) {
+        if (!check[i])
+            return 0;
+    }
+    return 1;
+}
